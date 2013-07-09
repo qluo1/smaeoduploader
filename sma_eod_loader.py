@@ -1,9 +1,12 @@
 import csv
 import time
 import datetime
+import subprocess
 import getopt
 import sys
+from subprocess import Popen, PIPE, STDOUT
 import urllib2
+import urllib
 
 ## global variables
 from conf import *
@@ -14,7 +17,7 @@ def eod_extract(date,se,plant,outpath):
         exp_range = date +"-" + date
         print "date : %s" % exp_range
         try:
-                subprocess.check_call([se,plant,"-userlevel","user","-password","abcd1234",\
+                subprocess.check_call([se,plant,"-userlevel","user","-password",sma_password,\
                                                 "-exportdir",outpath,"-exportrange", exp_range, "-export", "energy5min"])
         except subprocess.CalledProcessError:
                 print "error on SE extract: " + subprocess.STDOUT
@@ -68,18 +71,35 @@ def bulk_update(init_energy,data,_key,_id):
         item = "%s,%s,%d,%d;" %(i[0],i[1],round((i[2] - init_energy)*1000),round(i[3] * 1000)) 
         print item
         _data = _data + item
-    #print data
+        
     print "batch uploading..."
     # using urllib2 to post data
     _header = {'X-Pvoutput-Apikey':  key, 'X-Pvoutput-SystemId' : id}
     _url = 'http://pvoutput.org/service/r2/addbatchstatus.jsp'
     request = urllib2.Request(_url, _data, _header)
-    opener = urllib2.build_opener(urllib2.HTTPHandler(debuglevel=0))
+    opener = urllib2.build_opener(urllib2.HTTPHandler(debuglevel=1))
     #print request
     response = opener.open(request)
     print response.read()
     time.sleep(sleep_time)
+    
 
+def query_stat(key,id):
+    """
+        query last updated date
+        using http://pvoutput.org/service/r1/addbatchstatus.jsp upload data in batch
+    """
+
+    cmd = "curl.exe -s -H \"X-Pvoutput-Apikey:%s\" -H \"X-Pvoutput-SystemId:%s\" http://pvoutput.org/service/r1/getstatistic.jsp" %(key,id)
+
+    #print cmd
+    p = Popen(cmd,shell=False,stdout=PIPE)
+    output = p.stdout.read().split(",")
+
+    print output[8]
+    return output[8]
+    
+    
 def main():
     today = datetime.date.today().strftime("%Y%m%d")
     rev = False
@@ -107,6 +127,8 @@ def main():
     ## data file name with full path
     data_file = data_path + "/" + sys_name + "-" + today + ".csv"
     print "upload...  " + data_file
+    ##
+    #upload_data(data_file,key,id,rev)
 
     batch_upload_data(data_file,key,id,rev)
 if __name__ == "__main__":
