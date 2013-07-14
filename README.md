@@ -13,3 +13,9 @@ http://www.pvoutput.org/list.jsp?userid=1865
 Developed in Python2, currently not working for Python3
 
 original code located: http://code.google.com/p/smaeoduploader/
+
+
+Instruction:
+- rename conf.py.template to conf.py
+- update system settings in the conf.py for your system
+ 
