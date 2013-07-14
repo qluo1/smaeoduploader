@@ -1,0 +1,25 @@
+#############################
+#  Application configuration
+#############################
+
+# Sunney Explorer path
+se_path=r"d:\Program Files\SMA\Sunny Explorer\sunnyexplorer.exe"
+# SMA plant data file
+se_plant_data_file=r"d:\sma\SMA_Ashwood.sx2"
+#sma password
+sma_password="password"
+# SMA inverter export data folder
+data_path=r"d:\sma\export"
+# Sunny Explorer system name
+sys_name = ""
+# pvoutput.org API KEY
+key = "your own id"
+## pvoutput.org system ID
+id = 1405
+
+## 30 seconds -- can't finish
+#sleep_time = 40
+
+sleep_time = 80
+upload_interval = ('0','5')
+
