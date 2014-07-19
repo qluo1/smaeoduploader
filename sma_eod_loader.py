@@ -43,7 +43,7 @@ def batch_upload_data(data_file,key,id,r):
                         sma_data.append( (i[0][6:10] + i[0][3:5] + i[0][0:2], i[0][11:16], float(i[1]),float(i[2]) ) )
                         index = index + 1
                 ## b, found the start energy
-                if count > 9 and float(i[2]) == 0 and found == 0:
+                if count > 9 and len(i) == 3 and float(i[2]) == 0 and found == 0:
                             start_energy = float(i[1])
                             found = 1
                             print start_energy
