@@ -33,13 +33,13 @@ def batch_upload_data(data_file,key,id,r):
     start_energy = 0
     sma_data = []
     reader = csv.reader(open(data_file,"r"),delimiter=";")
-
+   
     ## load SMA data in single run
     for i in reader:
                 count = count + 1
                 ## a, ignore 1st 9 lines
                 ##print i
-                if count > 9 and float(i[2]) > 0:
+                if count > 9 and len(i) == 3 and float(i[2]) > 0:
                         sma_data.append( (i[0][6:10] + i[0][3:5] + i[0][0:2], i[0][11:16], float(i[1]),float(i[2]) ) )
                         index = index + 1
                 ## b, found the start energy
